@@ -1,7 +1,7 @@
 package kevinamulliss.projects.wmata_visualizer.request;
 
-import kevinamulliss.projects.wmata_visualizer.model.CacheControl;
-import kevinamulliss.projects.wmata_visualizer.model.RequestMethod;
+import kevinamulliss.projects.wmata_visualizer.model.html.CacheControl;
+import kevinamulliss.projects.wmata_visualizer.model.html.RequestMethod;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;

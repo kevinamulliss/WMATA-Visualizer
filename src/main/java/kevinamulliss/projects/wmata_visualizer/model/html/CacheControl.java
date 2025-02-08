@@ -1,4 +1,4 @@
-package kevinamulliss.projects.wmata_visualizer.model;
+package kevinamulliss.projects.wmata_visualizer.model.html;
 
 public enum CacheControl {
     NO_CACHE;
