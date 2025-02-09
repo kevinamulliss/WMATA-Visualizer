@@ -1,7 +1,7 @@
 package kevinamulliss.projects.wmata_visualizer.request;
 
-import kevinamulliss.projects.wmata_visualizer.model.html.CacheControl;
-import kevinamulliss.projects.wmata_visualizer.model.html.RequestMethod;
+import kevinamulliss.projects.wmata_visualizer.model.http.CacheControl;
+import kevinamulliss.projects.wmata_visualizer.model.http.RequestMethod;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -15,11 +15,7 @@ public abstract class WMATARequest {
     protected CacheControl cacheControl = CacheControl.NO_CACHE;
     protected RequestMethod method = RequestMethod.GET;
 
-    public WMATARequest() {
-        this("");
-    }
-
-    public WMATARequest(String path) {
+    protected WMATARequest(String path) {
         this.url = PATH + path;
     }
 

@@ -1,4 +1,4 @@
-package kevinamulliss.projects.wmata_visualizer.model.html;
+package kevinamulliss.projects.wmata_visualizer.model.http;
 
 public enum RequestMethod {
     GET, POST;

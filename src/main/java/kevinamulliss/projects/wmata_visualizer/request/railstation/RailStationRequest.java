@@ -10,17 +10,10 @@ public abstract class RailStationRequest extends WMATARequest {
     private static final String PATH = "/Rail.svc/json";
 
     /**
-     * Default constructor.
-     */
-    public RailStationRequest() {
-        this("");
-    }
-
-    /**
      * Parameter constructor.
-     * @param path An HTML path which represents an extension of this requests base path.
+     * @param path An HTML path which represents an extension of this request's base path.
      */
-    public RailStationRequest(String path) {
+    protected RailStationRequest(String path) {
         super(PATH + path);
     }
 }
