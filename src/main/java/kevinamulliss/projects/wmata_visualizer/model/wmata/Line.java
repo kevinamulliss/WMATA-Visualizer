@@ -10,29 +10,25 @@ public class Line {
     // Full name of line color.
     @SerializedName("DisplayName")
     private String displayName;
-    // TODO: convert to enum when station code requests are functional
     // End station code. For example, will be E10 (Greenbelt) for the Green Line, B11 (Glenmont) for the Red Line, etc.
     // Use this value in other rail-related APIs to retrieve data about a station.
     @SerializedName("EndStationCode")
-    private String endStationCode;
-    // TODO: convert to enum when station code requests are functional
+    private StationCode endStationCode;
     // Intermediate terminal station code. During normal service, some trains on some lines might end their trip prior
     // to the StartStationCode or EndStationCode. A good example is on the Red Line where some trains stop at A11
     // (Grosvenor) or B08 (Silver Spring). Empty string if not defined.
     @SerializedName("InternalDestination1")
-    private String internalDestinationCode1;
-    // TODO: convert to enum when station code requests are functional
+    private StationCode internalDestinationCode1;
     // Similar to InternalDestination1.
     @SerializedName("InternalDestination2")
-    private String internalDestinationCode2;
+    private StationCode internalDestinationCode2;
     // 	Two-letter abbreviation for the line (e.g.: RD, BL, YL, OR, GR, or SV).
     @SerializedName("LineCode")
     private LineCode lineCode;
-    // TODO: convert to enum when station code requests are functional
     // Start station code. For example, will be F11 (Branch Avenue) for the Green Line, A15 (Shady Grove) for the Red
     // Line, etc. Use this value in other rail-related APIs to retrieve data about a station.
     @SerializedName("StartStationCode")
-    private String startStationCode;
+    private StationCode startStationCode;
 
     public String getDisplayName() {
         return displayName;
@@ -42,27 +38,27 @@ public class Line {
         this.displayName = displayName;
     }
 
-    public String getEndStationCode() {
+    public StationCode getEndStationCode() {
         return endStationCode;
     }
 
-    public void setEndStationCode(String endStationCode) {
+    public void setEndStationCode(StationCode endStationCode) {
         this.endStationCode = endStationCode;
     }
 
-    public String getInternalDestinationCode1() {
+    public StationCode getInternalDestinationCode1() {
         return internalDestinationCode1;
     }
 
-    public void setInternalDestinationCode1(String internalDestinationCode1) {
+    public void setInternalDestinationCode1(StationCode internalDestinationCode1) {
         this.internalDestinationCode1 = internalDestinationCode1;
     }
 
-    public String getInternalDestinationCode2() {
+    public StationCode getInternalDestinationCode2() {
         return internalDestinationCode2;
     }
 
-    public void setInternalDestinationCode2(String internalDestinationCode2) {
+    public void setInternalDestinationCode2(StationCode internalDestinationCode2) {
         this.internalDestinationCode2 = internalDestinationCode2;
     }
 
@@ -74,11 +70,11 @@ public class Line {
         this.lineCode = lineCode;
     }
 
-    public String getStartStationCode() {
+    public StationCode getStartStationCode() {
         return startStationCode;
     }
 
-    public void setStartStationCode(String startStationCode) {
+    public void setStartStationCode(StationCode startStationCode) {
         this.startStationCode = startStationCode;
     }
 

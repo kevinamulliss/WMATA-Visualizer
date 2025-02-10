@@ -1,5 +1,7 @@
 package kevinamulliss.projects.wmata_visualizer.request.railstation;
 
+import kevinamulliss.projects.wmata_visualizer.model.wmata.StationCode;
+
 /**
  * Represents a request for the path between two WMATA stations. See <a href="https://developer.wmata.com/api-details#api=5476364f031f590f38092507&operation=5476364f031f5909e4fe330e">api link</a>.
  */
@@ -14,7 +16,7 @@ public class PathBetweenStationsRequest extends RailStationRequest {
      * @param fromStationCode Station to build path from.
      * @param toStationCode Station to build path to.
      */
-    public PathBetweenStationsRequest(String fromStationCode, String toStationCode) {
-        super(PATH + "?" + FROM_STATION_KEY + fromStationCode + "&" + TO_STATION_KEY + toStationCode);
+    public PathBetweenStationsRequest(StationCode fromStationCode, StationCode toStationCode) {
+        super(PATH + "?" + FROM_STATION_KEY + fromStationCode.name() + "&" + TO_STATION_KEY + toStationCode.name());
     }
 }

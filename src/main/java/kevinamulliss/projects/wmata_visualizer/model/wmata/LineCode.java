@@ -7,17 +7,17 @@ import com.google.gson.annotations.SerializedName;
  */
 public enum LineCode {
     @SerializedName("RD")
-    RD("Red Line"),
+    RD("Red"),
     @SerializedName("BL")
-    BL("Blue Line"),
+    BL("Blue"),
     @SerializedName("YL")
-    YL("Yellow Line"),
+    YL("Yellow"),
     @SerializedName("OR")
-    OR("Orange Line"),
+    OR("Orange"),
     @SerializedName("GR")
-    GR("Green Line"),
+    GR("Green"),
     @SerializedName("SV")
-    SV("Silver Line");
+    SV("Silver");
 
     // formatted name
     private final String lineCode;
@@ -36,6 +36,6 @@ public enum LineCode {
      */
     @Override
     public String toString() {
-        return this.lineCode;
+        return this.lineCode + " Line";
     }
 }

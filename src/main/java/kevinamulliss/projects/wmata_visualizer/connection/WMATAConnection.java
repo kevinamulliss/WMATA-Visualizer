@@ -53,7 +53,7 @@ public class WMATAConnection {
         }
     }
 
-    private static Optional<String> request(WMATARequest request) {
+    public static Optional<String> request(WMATARequest request) {
         HttpURLConnection connection = null;
 
         try {
@@ -112,8 +112,7 @@ public class WMATAConnection {
         return Optional.empty();
     }
 
-    // TODO: convert to enum
-    public static Optional<List<MetroPathItem>> getMetroPath(String fromStation, String toStation) {
+    public static Optional<List<MetroPathItem>> getMetroPath(StationCode fromStation, StationCode toStation) {
         Optional<String> response = WMATAConnection.request(new PathBetweenStationsRequest(fromStation, toStation));
         if (response.isPresent()) {
             Type listType = new TypeToken<List<MetroPathItem>>(){}.getType();

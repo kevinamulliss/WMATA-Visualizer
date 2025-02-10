@@ -16,7 +16,7 @@ public class TrainPosition {
     // Destination station code. Can be NULL. Use this value in other rail-related APIs to retrieve data about a
     // station. Note: this value may sometimes differ from destination station code returned by our Next Trains methods.
     @SerializedName("DestinationStationCode")
-    private String destinationStationCode;
+    private StationCode destinationStationCode;
     // The direction of movement regardless of which track the train is on. Valid values are 1 or 2. Generally speaking,
     // trains with direction 1 are northbound/eastbound, while trains with direction 2 are southbound/westbound.
     @SerializedName("DirectionNum")
@@ -55,11 +55,11 @@ public class TrainPosition {
         this.circuitId = circuitId;
     }
 
-    public String getDestinationStationCode() {
+    public StationCode getDestinationStationCode() {
         return destinationStationCode;
     }
 
-    public void setDestinationStationCode(String destinationStationCode) {
+    public void setDestinationStationCode(StationCode destinationStationCode) {
         this.destinationStationCode = destinationStationCode;
     }
 

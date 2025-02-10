@@ -11,9 +11,8 @@ import javax.annotation.Nullable;
 public class Station {
     @SerializedName("Address")
     private Address address;
-    // TODO: replace with enum
     @SerializedName("Code")
-    private String stationCode;
+    private StationCode stationCode;
     @SerializedName("Lat")
     private double latitude;
     // Two-letter abbreviation for one line (e.g.: RD, BL, YL, OR, GR, or SV) served by this station. If the station
@@ -34,15 +33,13 @@ public class Station {
     private double longitude;
     @SerializedName("Name")
     private String name;
-    // TODO: replace with enum
     // For stations with multiple platforms (e.g.: Gallery Place, Fort Totten, L'Enfant Plaza, and Metro Center), the
     // additional StationCode will be listed here.
     @SerializedName("StationTogether1")
-    private String stationTogether1;
-    // TODO: replace with enum
+    private StationCode stationTogether1;
     // Similar in function to StationTogether2. Currently not in use.
     @SerializedName("StationTogether2")
-    private String stationTogether2;
+    private StationCode stationTogether2;
 
     public Address getAddress() {
         return address;
@@ -52,11 +49,11 @@ public class Station {
         this.address = address;
     }
 
-    public String getStationCode() {
+    public StationCode getStationCode() {
         return stationCode;
     }
 
-    public void setStationCode(String stationCode) {
+    public void setStationCode(StationCode stationCode) {
         this.stationCode = stationCode;
     }
 
@@ -120,20 +117,20 @@ public class Station {
     }
 
     @Nullable
-    public String getStationTogether1() {
+    public StationCode getStationTogether1() {
         return stationTogether1;
     }
 
-    public void setStationTogether1(String stationTogether1) {
+    public void setStationTogether1(StationCode stationTogether1) {
         this.stationTogether1 = stationTogether1;
     }
 
     @Nullable
-    public String getStationTogether2() {
+    public StationCode getStationTogether2() {
         return stationTogether2;
     }
 
-    public void setStationTogether2(String stationTogether2) {
+    public void setStationTogether2(StationCode stationTogether2) {
         this.stationTogether2 = stationTogether2;
     }
 }

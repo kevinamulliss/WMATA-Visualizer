@@ -16,10 +16,9 @@ public class MetroPathItem {
     // Ordered sequence number.
     @SerializedName("SeqNum")
     private int sequenceNumber;
-    // TODO: convert to enum
     // Station code for this station. Use this value in other rail-related APIs to retrieve data about a station.
     @SerializedName("StationCode")
-    private String stationCode;
+    private StationCode stationCode;
     // Full name for this station, as shown on the WMATA website.
     @SerializedName("StationName")
     private String stationName;
@@ -48,11 +47,11 @@ public class MetroPathItem {
         this.sequenceNumber = sequenceNumber;
     }
 
-    public String getStationCode() {
+    public StationCode getStationCode() {
         return stationCode;
     }
 
-    public void setStationCode(String stationCode) {
+    public void setStationCode(StationCode stationCode) {
         this.stationCode = stationCode;
     }
 
