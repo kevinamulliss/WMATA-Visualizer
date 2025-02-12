@@ -36,14 +36,14 @@ public class CLICommand<T> {
         return this.HELP;
     }
 
-    public void run() {
-        this.run(new String[0]);
+    public Optional<List<T>> run() {
+        return this.run(new String[0]);
     }
 
-    public void run(String[] args) {
+    public Optional<List<T>> run(String[] args) {
         if (args.length < this.PARAM_MIN) {
             System.err.println(this.COMMAND + "requires " + this.PARAM_MIN + " parameters, but " + args.length + " provided.");
-            return;
+            return Optional.empty();
         }
 
         if (args.length > this.PARAM_MAX) {
@@ -55,10 +55,13 @@ public class CLICommand<T> {
         if (result.isPresent()) {
             Type listType = new TypeToken<List<T>>(){}.getType();
             JsonObject nestedObject = GSON.fromJson(result.get(), JsonObject.class);
-            nestedObject.keySet().stream().findFirst().ifPresent((String key) -> {
-                System.out.println(GSON.fromJson(nestedObject.get(key), listType).toString());
-            });
+            Optional<String> optionalKey = nestedObject.keySet().stream().findAny();
+            if (optionalKey.isPresent()) {
+                return GSON.fromJson(nestedObject.get(optionalKey.get()), listType);
+            }
         }
+
+        return Optional.empty();
     }
 
     @Override

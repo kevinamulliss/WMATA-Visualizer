@@ -1,7 +1,8 @@
 package kevinamulliss.projects.wmata_visualizer.cli;
 
-import kevinamulliss.projects.wmata_visualizer.model.wmata.LineCode;
-import kevinamulliss.projects.wmata_visualizer.model.wmata.Station;
+import kevinamulliss.projects.wmata_visualizer.model.wmata.*;
+import kevinamulliss.projects.wmata_visualizer.request.railstation.LinesRequest;
+import kevinamulliss.projects.wmata_visualizer.request.railstation.PathBetweenStationsRequest;
 import kevinamulliss.projects.wmata_visualizer.request.railstation.StationListRequest;
 
 import java.util.*;
@@ -34,6 +35,18 @@ public class CLIThread extends Thread {
                         return new StationListRequest();
                     }
                 }));
+        commands.add(new CLICommand<Line>(
+                "lines",
+                "No inputs. Provides information about every WMATA Metrorail line.",
+                0, 0,
+                ((String[] input) -> new LinesRequest())
+        ));
+        commands.add(new CLICommand<MetroPathItem>(
+                "path-between",
+                "Inputs 2 Station Codes. Returns the path of stations between the two stations represented by those Station Codes.",
+                2, 2,
+                ((String[] input) -> new PathBetweenStationsRequest(StationCode.valueOf(input[0]), StationCode.valueOf(input[1])))
+        ));
         return commands;
     }
     @Override
@@ -54,7 +67,7 @@ public class CLIThread extends Thread {
             if (formattedInput.equals("exit")) {
                 break;
             } else {
-                resolveCommand(rawInput, commands);
+                Optional<? extends List<?>> result = resolveCommand(rawInput, commands);
             }
             System.out.print("> ");
         }
@@ -63,7 +76,7 @@ public class CLIThread extends Thread {
         scanner.close();
     }
 
-    public void resolveCommand(String command, Set<CLICommand<?>> commands) {
+    public Optional<? extends List<?>> resolveCommand(String command, Set<CLICommand<?>> commands) {
         if (command.equalsIgnoreCase("help")) {
             System.out.println(this.helpMenu);
         } else {
@@ -77,11 +90,58 @@ public class CLIThread extends Thread {
             if (optionalCommand.isPresent()) {
                 CLICommand<?> finalCommand = optionalCommand.get();
                 if (tokens.length > 1) {
-                    finalCommand.run(Arrays.copyOfRange(tokens, 1, tokens.length));
+                    return finalCommand.run(Arrays.copyOfRange(tokens, 1, tokens.length));
                 } else {
-                    finalCommand.run();
+                    return finalCommand.run();
                 }
             }
         }
     }
 }
+
+/*
+chatgpt paginated output example
+import java.util.Scanner;
+
+public class PaginatedOutput {
+    public static void main(String[] args) {
+        String[] data = {
+            "Element 1:\nLine 1\nLine 2\nLine 3",
+            "Element 2:\nLine 1\nLine 2\nLine 3",
+            "Element 3:\nLine 1\nLine 2\nLine 3",
+            "Element 4:\nLine 1\nLine 2\nLine 3"
+        };
+
+        displayWithPagination(data);
+    }
+
+    public static void displayWithPagination(String[] data) {
+        Scanner scanner = new Scanner(System.in);
+        int index = 0;
+
+        while (index < data.length) {
+            clearScreen();  // Optional: Clears the terminal screen
+            System.out.println(data[index]);
+            System.out.println("\n[Press Enter to continue, 'b' to go back, 'q' to quit]");
+
+            String input = scanner.nextLine();
+            if (input.equals("q")) {
+                break;
+            } else if (input.equals("b")) {
+                if (index > 0) index--; // Move back
+            } else {
+                index++; // Move forward
+            }
+        }
+
+        scanner.close();
+    }
+
+    public static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+}
+
+
+ */
