@@ -3,6 +3,8 @@ package kevinamulliss.projects.wmata_visualizer.model.wmata;
 import com.google.gson.annotations.SerializedName;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Model for representing a Station as defined by the WMATA API. See <a href="https://developer.wmata.com/api-details#api=5476364f031f590f38092507&operation=5476364f031f5909e4fe3311">link</a>.
@@ -132,5 +134,29 @@ public class Station {
 
     public void setStationTogether2(StationCode stationTogether2) {
         this.stationTogether2 = stationTogether2;
+    }
+
+    public List<LineCode> getLineCodes() {
+        List<LineCode> lineCodes = new ArrayList<LineCode>();
+
+        if (this.lineCode1 != null) {
+            lineCodes.add(this.lineCode1);
+        }
+        if (this.lineCode2 != null) {
+            lineCodes.add(this.lineCode2);
+        }
+        if (this.lineCode3 != null) {
+            lineCodes.add(this.lineCode3);
+        }
+        if (this.lineCode4 != null) {
+            lineCodes.add(this.lineCode4);
+        }
+
+        return lineCodes;
+    }
+
+    @Override
+    public String toString() {
+        return this.stationCode.toString() + " (" + this.stationCode.name() + ")";
     }
 }

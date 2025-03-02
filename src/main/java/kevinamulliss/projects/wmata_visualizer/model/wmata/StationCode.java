@@ -1,5 +1,9 @@
 package kevinamulliss.projects.wmata_visualizer.model.wmata;
 
+import kevinamulliss.projects.wmata_visualizer.util.Display;
+
+import java.util.List;
+
 public enum StationCode {
     J03("Franconia-Springfield", new LineCode[]{LineCode.BL}),
     J02("Van Dorn Street", new LineCode[]{LineCode.BL, LineCode.YL}),
@@ -118,18 +122,16 @@ public enum StationCode {
         this.lineCodes = lineCodes;
     }
 
+    public String getDisplayName() {
+        return this.displayName;
+    }
+
+    public LineCode[] getLineCodes() {
+        return this.lineCodes;
+    }
+
     @Override
     public String toString() {
-        StringBuilder output = new StringBuilder(this.displayName + " (" + this.name() + ")");
-        if (this.lineCodes.length >= 1) {
-            output.append(" on the ");
-            output.append(this.lineCodes[0].name());
-            for (int i = 1; i < this.lineCodes.length; i++) {
-                output.append(", ").append(this.lineCodes[i].name());
-            }
-            output.append(this.lineCodes.length > 1 ? " lines" : " line");
-        }
-
-        return output.toString();
+        return Display.buildPrettyStationLineOutput(this.displayName, this.lineCodes);
     }
 }

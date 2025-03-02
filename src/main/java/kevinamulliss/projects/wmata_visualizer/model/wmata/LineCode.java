@@ -22,6 +22,10 @@ public enum LineCode {
     // formatted name
     private final String lineCode;
 
+    public String getLineCodeName() {
+        return this.lineCode + " (" + this.name() + ")";
+    }
+
     /**
      * Enum constructor for inputted formatted name.
      * @param lineCode Formatted name of line.

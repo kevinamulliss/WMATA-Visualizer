@@ -84,7 +84,7 @@ public class Line {
      */
     @Override
     public String toString() {
-        return this.displayName;
+        return this.displayName + " (" + this.lineCode.name() + ")";
     }
 
     /**
