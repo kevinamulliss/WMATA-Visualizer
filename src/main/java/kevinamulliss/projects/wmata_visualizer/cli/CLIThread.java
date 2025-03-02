@@ -1,11 +1,9 @@
 package kevinamulliss.projects.wmata_visualizer.cli;
 
 import kevinamulliss.projects.wmata_visualizer.cli.validation.DoubleValidator;
+import kevinamulliss.projects.wmata_visualizer.cli.validation.StationCodeValidator;
 import kevinamulliss.projects.wmata_visualizer.model.wmata.*;
-import kevinamulliss.projects.wmata_visualizer.request.railstation.LinesRequest;
-import kevinamulliss.projects.wmata_visualizer.request.railstation.PathBetweenStationsRequest;
-import kevinamulliss.projects.wmata_visualizer.request.railstation.StationEntrancesRequest;
-import kevinamulliss.projects.wmata_visualizer.request.railstation.StationListRequest;
+import kevinamulliss.projects.wmata_visualizer.request.railstation.*;
 
 import java.util.*;
 
@@ -67,6 +65,20 @@ public class CLIThread extends Thread {
                 ((String[] input) -> new StationEntrancesRequest(Double.parseDouble(input[0]), Double.parseDouble(input[1]), Double.parseDouble(input[2]))),
                 StationEntrance.class
 
+        ));
+        commands.add(new CLICommand<StationParking>(
+                "parking",
+                "Inputs nothing or a station code. If nothing, parking information for all stations is outputted. If a station code, parking about that station is outputted.",
+                0, 1,
+                new StationCodeValidator(),
+                (String[] input) -> {
+                    if (input.length >= 1) {
+                        return new ParkingInformationRequest(StationCode.valueOf(input[0]));
+                    } else {
+                        return new ParkingInformationRequest();
+                    }
+                },
+                StationParking.class
         ));
         return commands;
     }

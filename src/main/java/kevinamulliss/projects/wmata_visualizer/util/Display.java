@@ -1,6 +1,7 @@
 package kevinamulliss.projects.wmata_visualizer.util;
 
 import kevinamulliss.projects.wmata_visualizer.model.wmata.LineCode;
+import kevinamulliss.projects.wmata_visualizer.model.wmata.Station;
 import kevinamulliss.projects.wmata_visualizer.model.wmata.StationCode;
 
 import javax.annotation.Nullable;
@@ -19,6 +20,10 @@ public class Display {
         System.arraycopy(stationCode2.getLineCodes(), 0, lineCodes, stationCode1.getLineCodes().length, stationCode2.getLineCodes().length);
 
         return buildPrettyStationLineOutput(stationCode1.getDisplayName(), lineCodes) + " (" + stationCode1.name() + "/" + stationCode2.name() + ")";
+    }
+
+    public static String buildPrettyStationLineOutput(StationCode stationCode) {
+        return buildPrettyStationLineOutput(stationCode.getDisplayName(), stationCode.getLineCodes());
     }
 
     public static String buildPrettyStationLineOutput(String stationName, LineCode[] lineCodes) {

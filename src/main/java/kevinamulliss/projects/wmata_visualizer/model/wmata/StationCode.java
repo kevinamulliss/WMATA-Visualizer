@@ -132,6 +132,6 @@ public enum StationCode {
 
     @Override
     public String toString() {
-        return Display.buildPrettyStationLineOutput(this.displayName, this.lineCodes);
+        return Display.buildPrettyStationLineOutput(this);
     }
 }
