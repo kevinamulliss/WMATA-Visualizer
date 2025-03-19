@@ -1,6 +1,7 @@
 package kevinamulliss.projects.wmata_visualizer.connection;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import kevinamulliss.projects.wmata_visualizer.model.wmata.*;
@@ -14,6 +15,7 @@ import kevinamulliss.projects.wmata_visualizer.request.railstation.LinesRequest;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -53,7 +55,7 @@ public class WMATAConnection {
         }
     }
 
-    public static Optional<String> request(WMATARequest request) {
+    public static Optional<String> buildRequest(WMATARequest request) {
         HttpURLConnection connection = null;
 
         try {
@@ -86,51 +88,27 @@ public class WMATAConnection {
         return Optional.empty();
     }
 
+    public static <T> Optional<List<T>> rawToObject(String raw, Class<T> objectClass) {
+        JsonObject nestedObject = GSON.fromJson(raw, JsonObject.class);
+        Optional<String> optionalKey = nestedObject.keySet().stream().findAny();
+        if (optionalKey.isPresent()) {
+            JsonElement element = nestedObject.get(optionalKey.get());
+            List<T> results = new ArrayList<T>();
+            for (JsonElement jsonElement : element.getAsJsonArray()) {
+                results.add(GSON.fromJson(jsonElement, objectClass));
+            }
+            return Optional.of(results);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public static <T> Optional<List<T>> request(WMATARequest request, Class<T> objectClass) {
+        Optional<String> result = WMATAConnection.buildRequest(request);
+        return result.flatMap(s -> WMATAConnection.rawToObject(s, objectClass));
+    }
+
     public static boolean validateAPI() {
-        return WMATAConnection.request(new ValidateRequest()).isPresent();
-    }
-
-    public static Optional<List<TrainPosition>> getTrainPositions() {
-        Optional<String> response = WMATAConnection.request(new TrainPositionRequest());
-        if (response.isPresent()) {
-            Type listType = new TypeToken<List<TrainPosition>>(){}.getType();
-            JsonObject nestedObject = GSON.fromJson(response.get(), JsonObject.class);
-            return Optional.of(GSON.fromJson(nestedObject.get("TrainPositions"), listType));
-        }
-
-        return Optional.empty();
-    }
-
-    public static Optional<List<Line>> getLines() {
-        Optional<String> response = WMATAConnection.request(new LinesRequest());
-        if (response.isPresent()) {
-            Type listType = new TypeToken<List<Line>>(){}.getType();
-            JsonObject nestedObject = GSON.fromJson(response.get(), JsonObject.class);
-            return Optional.of(GSON.fromJson(nestedObject.get("Lines"), listType));
-        }
-
-        return Optional.empty();
-    }
-
-    public static Optional<List<MetroPathItem>> getMetroPath(StationCode fromStation, StationCode toStation) {
-        Optional<String> response = WMATAConnection.request(new PathBetweenStationsRequest(fromStation, toStation));
-        if (response.isPresent()) {
-            Type listType = new TypeToken<List<MetroPathItem>>(){}.getType();
-            JsonObject nestedObject = GSON.fromJson(response.get(), JsonObject.class);
-            return Optional.of(GSON.fromJson(nestedObject.get("Path"), listType));
-        }
-
-        return Optional.empty();
-    }
-
-    public static Optional<List<Station>> getStations(LineCode lineCode) {
-        Optional<String> response = WMATAConnection.request(new StationListRequest(lineCode));
-        if (response.isPresent()) {
-            Type listType = new TypeToken<List<Station>>(){}.getType();
-            JsonObject nestedObject = GSON.fromJson(response.get(), JsonObject.class);
-            return Optional.of(GSON.fromJson(nestedObject.get("Stations"), listType));
-        }
-
-        return Optional.empty();
+        return WMATAConnection.buildRequest(new ValidateRequest()).isPresent();
     }
 }

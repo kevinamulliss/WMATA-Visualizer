@@ -21,7 +21,6 @@ public class Main {
         boolean apiConnected = WMATAConnection.initializeConnection();
         if (apiConnected) {
             System.out.println("succesfully connected to API");
-            Optional<List<Line>> lines = WMATAConnection.getLines();
             Thread cli = new CLIThread();
             cli.start();
             try {

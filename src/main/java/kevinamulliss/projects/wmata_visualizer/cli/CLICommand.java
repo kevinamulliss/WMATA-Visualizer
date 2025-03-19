@@ -127,21 +127,7 @@ public class CLICommand<T> {
         }
 
         WMATARequest request = EXEC.apply(args);
-        Optional<String> result = WMATAConnection.request(request);
-        if (result.isPresent()) {
-            JsonObject nestedObject = GSON.fromJson(result.get(), JsonObject.class);
-            Optional<String> optionalKey = nestedObject.keySet().stream().findAny();
-            if (optionalKey.isPresent()) {
-                JsonElement element = nestedObject.get(optionalKey.get());
-                List<T> results = new ArrayList<T>();
-                for (JsonElement jsonElement : element.getAsJsonArray()) {
-                    results.add(GSON.fromJson(jsonElement, this.CLASS));
-                }
-                return Optional.of(results);
-            }
-        }
-
-        return Optional.empty();
+        return WMATAConnection.request(request, this.CLASS);
     }
 
     @Override

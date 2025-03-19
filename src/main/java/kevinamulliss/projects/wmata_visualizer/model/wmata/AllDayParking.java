@@ -67,4 +67,10 @@ public class AllDayParking {
     public void setNonRiderSaturdayCost(double nonRiderSaturdayCost) {
         this.nonRiderSaturdayCost = nonRiderSaturdayCost;
     }
+
+    @Override
+    public String toString() {
+//        String output = this.totalCount + " spots";
+        return "test";
+    }
 }
