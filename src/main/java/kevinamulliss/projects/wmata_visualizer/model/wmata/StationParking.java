@@ -56,10 +56,6 @@ public class StationParking {
 
     @Override
     public String toString() {
-        String output = "Parking for " + Display.buildPrettyStationLineOutput(this.code);
-        output += ("\t" + this.notes);
-        output += ("\t" + this.allDayParking);
-        output += ("\t" + this.shortTermParking);
-        return output;
+        return this.code + ":\n\t" + this.allDayParking.toString() + "\n\t" + this.shortTermParking.toString();
     }
 }

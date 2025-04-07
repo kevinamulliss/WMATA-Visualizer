@@ -15,10 +15,7 @@ import kevinamulliss.projects.wmata_visualizer.request.railstation.LinesRequest;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 public class WMATAConnection {
     private static final String API_KEY_KEY = "api_key";
@@ -90,17 +87,23 @@ public class WMATAConnection {
 
     public static <T> Optional<List<T>> rawToObject(String raw, Class<T> objectClass) {
         JsonObject nestedObject = GSON.fromJson(raw, JsonObject.class);
-        Optional<String> optionalKey = nestedObject.keySet().stream().findAny();
-        if (optionalKey.isPresent()) {
-            JsonElement element = nestedObject.get(optionalKey.get());
-            List<T> results = new ArrayList<T>();
-            for (JsonElement jsonElement : element.getAsJsonArray()) {
-                results.add(GSON.fromJson(jsonElement, objectClass));
+        if (nestedObject.size() == 1) {
+            Optional<String> optionalKey = nestedObject.keySet().stream().findAny();
+            if (optionalKey.isPresent()) {
+                JsonElement element = nestedObject.get(optionalKey.get());
+                List<T> results;
+                results = new ArrayList<T>();
+                for (JsonElement jsonElement : element.getAsJsonArray()) {
+                    results.add(GSON.fromJson(jsonElement, objectClass));
+                }
+
+                return Optional.of(results);
             }
-            return Optional.of(results);
         } else {
-            return Optional.empty();
+            return Optional.of(Collections.singletonList(GSON.fromJson(nestedObject, objectClass)));
         }
+
+        return Optional.empty();
     }
 
     public static <T> Optional<List<T>> request(WMATARequest request, Class<T> objectClass) {

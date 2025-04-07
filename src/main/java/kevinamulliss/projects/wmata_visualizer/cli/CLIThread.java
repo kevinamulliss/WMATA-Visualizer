@@ -9,7 +9,7 @@ import java.util.*;
 
 public class CLIThread extends Thread {
     private String helpMenu;
-
+    private final Set<CLICommand<?>> COMMANDS = getCommands();
     private String generateHelpMenu(Set<CLICommand<?>> commands) {
         StringBuilder help =
                 new StringBuilder("Available Commands:\n" +
@@ -22,7 +22,7 @@ public class CLIThread extends Thread {
         return help.toString();
     }
 
-    private Set<CLICommand<?>> getCommands() {
+    private static Set<CLICommand<?>> getCommands() {
         Set<CLICommand<?>> commands = new HashSet<>();
         commands.add(new CLICommand<Station>(
                 "list-stations",
@@ -80,12 +80,19 @@ public class CLIThread extends Thread {
                 },
                 StationParking.class
         ));
+        commands.add(new CLICommand<Station>(
+                "station",
+                "Inputs a station code and provides general information about that station.",
+                1, 1,
+                new StationCodeValidator(),
+                (String [] input) -> new StationInformationRequest(StationCode.valueOf(input[0])),
+                Station.class
+        ));
         return commands;
     }
     @Override
     public void run() {
-        Set<CLICommand<?>> commands = getCommands();
-        this.helpMenu = generateHelpMenu(commands);
+        this.helpMenu = generateHelpMenu(COMMANDS);
         Scanner scanner = new Scanner(System.in);
         String rawInput = "";
         String formattedInput = "";
@@ -100,7 +107,7 @@ public class CLIThread extends Thread {
             if (formattedInput.equals("exit")) {
                 break;
             } else {
-                Optional<? extends List<?>> result = resolveCommand(rawInput, commands);
+                Optional<? extends List<?>> result = resolveCommand(rawInput);
                 if (result.isPresent()) {
                     List<?> resultList = result.get();
                     // only do paginated output for arrays above size 10
@@ -113,13 +120,15 @@ public class CLIThread extends Thread {
                             System.out.println("Element " + (index + 1) + " out of " + resultList.size() + " results:");
                             System.out.println("\t" + resultList.get(index));
 
-                            if (index == 0) {
-                                System.out.println("Enter 'q' to quit, or 'n' for next element. Enter a number to go to that element.");
-                            } else if (index == resultList.size() - 1) {
-                                System.out.println("Enter 'q' to quit, or 'p' for previous element. Enter a number to go to that element.");
-                            } else {
-                                System.out.println("Enter 'q' to quit, 'n' for next element, or 'p' for previous element. Enter a number to go to that element.");
+                            System.out.print("Enter 'q' to quit");
+                            if (index < resultList.size() - 1) {
+                                System.out.print(" or 'n' for next element");
                             }
+                            if (index >= 1) {
+                                System.out.print(" or 'p' for previous element");
+                            }
+
+                            System.out.println(". Enter 'l' to list every element or a number to go to a specific element");
 
                             String pageInput = scanner.nextLine().trim().toLowerCase();
                             if (pageInput.startsWith("q")) {
@@ -128,6 +137,9 @@ public class CLIThread extends Thread {
                                 index--;
                             } else if (pageInput.startsWith("n")) {
                                 index++;
+                            } else if (pageInput.startsWith("l")) {
+                                printAll(resultList);
+                                break;
                             } else {
                                 // check if the user entered an index to jump to
                                 try {
@@ -145,10 +157,11 @@ public class CLIThread extends Thread {
                                 }
                             }
                         }
-                    } else {
-                        for (int i = 0; i < resultList.size(); i++) {
-                            System.out.println("(" + (i + 1) + "/" + resultList.size() + "): " + resultList.get(i));
-                        }
+                    } else if (resultList.size() == 1) {
+                        System.out.println(resultList.getFirst());
+                    }
+                    else {
+                        printAll(resultList);
                     }
                 }
             }
@@ -160,7 +173,13 @@ public class CLIThread extends Thread {
         scanner.close();
     }
 
-    public Optional<? extends List<?>> resolveCommand(String command, Set<CLICommand<?>> commands) {
+    private void printAll(List<?> results) {
+        for (int i = 0; i < results.size(); i++) {
+            System.out.println("(" + (i + 1) + "/" + results.size() + "): " + results.get(i));
+        }
+    }
+
+    public Optional<? extends List<?>> resolveCommand(String command) {
         if (command.equalsIgnoreCase("help")) {
             System.out.println(this.helpMenu);
         } else {
@@ -170,7 +189,7 @@ public class CLIThread extends Thread {
             }
             String commandKey = tokens[0];
 
-            Optional<CLICommand<?>> optionalCommand = commands.stream().filter((CLICommand<?> searchCommand) -> searchCommand.getCommand().equals(commandKey)).findAny();
+            Optional<CLICommand<?>> optionalCommand = COMMANDS.stream().filter((CLICommand<?> searchCommand) -> searchCommand.getCommand().equals(commandKey)).findAny();
             if (optionalCommand.isPresent()) {
                 CLICommand<?> finalCommand = optionalCommand.get();
                 if (tokens.length > 1) {

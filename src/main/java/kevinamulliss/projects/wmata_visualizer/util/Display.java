@@ -5,11 +5,13 @@ import kevinamulliss.projects.wmata_visualizer.model.wmata.Station;
 import kevinamulliss.projects.wmata_visualizer.model.wmata.StationCode;
 
 import javax.annotation.Nullable;
+import java.text.NumberFormat;
 
 /**
  * Utility class for complex operations for display operations.
  */
 public class Display {
+    private static NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
     @Nullable
     public static String aggregateStationLineOutputs(StationCode stationCode1, StationCode stationCode2) {
         if (!stationCode1.getDisplayName().equals(stationCode2.getDisplayName())) {
@@ -45,5 +47,18 @@ public class Display {
         }
 
         return result.toString();
+    }
+
+    /**
+     * Utility method to format a double dollar amount as a String. 0 translates to free.
+     * @param dollars The dollars (including fractional).
+     * @return The dollar value formatted as USD currency. If conversion fails returns the direct double to string.
+     */
+    public static String formatDoubleAsCurrency(double dollars) {
+        try {
+            return currencyFormatter.format(dollars);
+        } catch (ArithmeticException e) {
+            return Double.toString(dollars);
+        }
     }
 }

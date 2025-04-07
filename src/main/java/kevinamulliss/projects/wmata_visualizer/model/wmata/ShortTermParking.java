@@ -29,4 +29,13 @@ public class ShortTermParking {
     public void setNotes(String notes) {
         this.notes = notes;
     }
+
+    @Override
+    public String toString() {
+        String output = this.totalCount + " short term parking spots";
+        if (this.notes != null && !this.notes.isEmpty()) {
+            output += ": " + this.notes;
+        }
+        return output;
+    }
 }

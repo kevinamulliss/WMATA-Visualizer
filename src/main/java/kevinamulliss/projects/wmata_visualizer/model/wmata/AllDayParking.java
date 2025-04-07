@@ -1,6 +1,7 @@
 package kevinamulliss.projects.wmata_visualizer.model.wmata;
 
 import com.google.gson.annotations.SerializedName;
+import kevinamulliss.projects.wmata_visualizer.util.Display;
 
 /**
  * Model for representing information about all day parking at a Metro station. See <a href="https://developer.wmata.com/api-details#api=5476364f031f590f38092507&operation=5476364f031f5909e4fe330d">api link</a> for details.
@@ -68,9 +69,42 @@ public class AllDayParking {
         this.nonRiderSaturdayCost = nonRiderSaturdayCost;
     }
 
+    /**
+     * Private helper method to display a double amount of dollars as USD currency or free if it's 0.
+     * @param dollars Double amount of dollars, including fractional.
+     * @return Inputted value formatted as USD or "free" if it's 0.
+     */
+    private String currencyValueOrFree(double dollars) {
+        if (dollars == 0) {
+            return "free";
+        } else {
+            return Display.formatDoubleAsCurrency(dollars);
+        }
+    }
+
     @Override
     public String toString() {
-//        String output = this.totalCount + " spots";
-        return "test";
+        if (totalCount == 0) {
+            return "no all day parking";
+        } else if (riderCost == nonRiderCost && nonRiderCost == saturdayRiderCost && saturdayRiderCost == nonRiderSaturdayCost) {
+            return totalCount + "all day parking spots for " + currencyValueOrFree(riderCost) + " per day, Monday through Saturday";
+        } else {
+            String output = totalCount + " all day parking spots, ";
+            if (riderCost == nonRiderCost) {
+                output += this.currencyValueOrFree(riderCost) + " on weekdays ";
+            } else {
+                output += this.currencyValueOrFree(riderCost) + " for riders and ";
+                output += this.currencyValueOrFree(nonRiderCost) + " for non riders on weekdays ";
+            }
+            output += "and ";
+            if (saturdayRiderCost == nonRiderSaturdayCost) {
+                output += this.currencyValueOrFree(saturdayRiderCost) + " on Saturdays";
+            } else {
+                output += this.currencyValueOrFree(saturdayRiderCost) + " for riders and ";
+                output += this.currencyValueOrFree(nonRiderSaturdayCost) + " for non riders on Saturdays";
+            }
+
+            return output;
+        }
     }
 }
