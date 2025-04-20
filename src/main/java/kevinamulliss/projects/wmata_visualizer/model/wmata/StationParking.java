@@ -1,7 +1,6 @@
 package kevinamulliss.projects.wmata_visualizer.model.wmata;
 
 import com.google.gson.annotations.SerializedName;
-import kevinamulliss.projects.wmata_visualizer.util.Display;
 
 /**
  * Model representing information about parking available at Metrorail stations. See <a href="https://developer.wmata.com/api-details#api=5476364f031f590f38092507&operation=5476364f031f5909e4fe330d">api link</a>.

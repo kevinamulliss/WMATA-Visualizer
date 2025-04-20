@@ -85,8 +85,22 @@ public class CLIThread extends Thread {
                 "Inputs a station code and provides general information about that station.",
                 1, 1,
                 new StationCodeValidator(),
-                (String [] input) -> new StationInformationRequest(StationCode.valueOf(input[0])),
+                (String[] input) -> new StationInformationRequest(StationCode.valueOf(input[0])),
                 Station.class
+        ));
+        commands.add(new CLICommand<StationTiming>(
+                "station-timing",
+                "Inputs nothing or a station code. If nothing, first/last train timing for all stations is outputted. If a station code, first/last train timing about that station is outputted.",
+                0, 1,
+                new StationCodeValidator(),
+                (String[] input) -> {
+                    if (input.length >= 1) {
+                        return new StationTimingsRequest(StationCode.valueOf(input[0]));
+                    } else {
+                        return new StationTimingsRequest();
+                    }
+                },
+                StationTiming.class
         ));
         return commands;
     }
