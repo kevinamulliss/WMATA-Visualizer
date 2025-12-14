@@ -1,9 +1,11 @@
 package kevinamulliss.projects.wmata_visualizer.connection;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import kevinamulliss.projects.wmata_visualizer.json.LocalTimeSerializer;
 import kevinamulliss.projects.wmata_visualizer.model.wmata.*;
 import kevinamulliss.projects.wmata_visualizer.request.railstation.PathBetweenStationsRequest;
 import kevinamulliss.projects.wmata_visualizer.request.railstation.StationListRequest;
@@ -15,6 +17,7 @@ import kevinamulliss.projects.wmata_visualizer.request.railstation.LinesRequest;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
+import java.time.LocalTime;
 import java.util.*;
 
 public class WMATAConnection {
@@ -22,7 +25,9 @@ public class WMATAConnection {
     private static String API_KEY;
     private final static String API_KEY_PATH = "src/main/resources/api-key.txt";
 
-    private static final Gson GSON = new Gson();
+    private static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapter(LocalTime.class, new LocalTimeSerializer())
+            .create();
 
     private static boolean connected = false;
 

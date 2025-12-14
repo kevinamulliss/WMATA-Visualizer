@@ -6,12 +6,15 @@ import kevinamulliss.projects.wmata_visualizer.model.wmata.StationCode;
 
 import javax.annotation.Nullable;
 import java.text.NumberFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Utility class for complex operations for display operations.
  */
 public class Display {
     private static NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
+    private static final DateTimeFormatter TWELVE_HOUR_TIME = DateTimeFormatter.ofPattern("h:mm a");
     @Nullable
     public static String aggregateStationLineOutputs(StationCode stationCode1, StationCode stationCode2) {
         if (!stationCode1.getDisplayName().equals(stationCode2.getDisplayName())) {
@@ -60,5 +63,9 @@ public class Display {
         } catch (ArithmeticException e) {
             return Double.toString(dollars);
         }
+    }
+
+    public static String localTimeToTwelveHourTIme(LocalTime localTime) {
+        return localTime.format(TWELVE_HOUR_TIME);
     }
 }
